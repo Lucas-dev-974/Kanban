@@ -1,7 +1,10 @@
+from hug.middleware import CORSMiddleware
 import hug
 
-@hug.local()
-def happy_birthday(name: hug.types.text, age: hug.types.number, hug_timer=3):
-    """Says happy birthday to a user"""
-    return {'message': 'Happy {0} Birthday {1}!'.format(age, name),
-            'took': float(hug_timer)}
+from controllers import column, task
+
+api = hug.API(__name__)
+api.http.add_middleware(CORSMiddleware(api, allow_origins=['*'])) # allow_origins à restreindre pour le déploiement
+
+api.extend(column, '/api/column')
+api.extend(task, '/api/task')

@@ -14,4 +14,5 @@ class Tasks(Base):
     position = Column(Integer)
     desc     = Column(String)
 
-    column = mapped_column(ForeignKey('columns.id'))
+    column  = mapped_column(ForeignKey('columns.id'))
+ 

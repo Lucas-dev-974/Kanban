@@ -14,4 +14,4 @@ class Columns(Base):
     title    = Column(String)
     position = Column(String)
 
-    tasks   = relationship(Tasks, backref='columns')
+    tasks   = relationship(Tasks, backref='columns', order_by=Tasks.position)

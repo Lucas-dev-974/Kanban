@@ -14,7 +14,7 @@ def getCols():
 
     for col in cols:
         json.append({
-            'id':       col.id,
+            'id':       str(col.id),
             'title':    col.title,
             'position': col.position,
             'item':     toJson(col.tasks, Tasks)
@@ -27,7 +27,6 @@ def getCols():
 def createCol(body):
     title    = body.get('title')
     position = body.get('position') or '0'
-
     
     if(title == None or title == ''):
         return 'Veuillez renseigner le champs titre !'
@@ -44,8 +43,9 @@ def switchColumn(body):
     new_col_id = body.get('new_col_id')
 
     task = session.query(Tasks).filter_by(id = task_id).first()
-    task.column = new_col_id
 
+    task.column = new_col_id
     session.commit()
+    session.flush()
     
     return 'ok'

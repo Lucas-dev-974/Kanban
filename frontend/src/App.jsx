@@ -5,6 +5,7 @@ import AddColumn from './components/addColumn';
 
 function App() {
   var [kanban, setKbn] = createSignal(null)
+  const [beforeDragPos, setBeforeDragPos] = createSignal()
 
   onMount(async () => {
     const cols = await (await request('api/column/all', 'GET', null)).json()
@@ -20,9 +21,35 @@ function App() {
         content:  '+' ,   
         class: 'kanban-title-button btn btn-default btn-xs',         // default class of the button
         footer: false                                                // position the button on footer
-      }
-    })
+      },
+      dragEl: function (el, source) {
+        setBeforeDragPos([...el.parentElement.children].indexOf(el) + 1)
+      },
 
+      dropEl: async function (el, target, source, sibling) {
+        const new_id_col  = target.parentNode.attributes['data-id'].value 
+        const old_id_col  = source.parentNode.attributes['data-id'].value
+        const item_id     = el.attributes['data-eid'].value
+
+        let from_position = beforeDragPos()
+        let to_position = [...el.parentElement.children].indexOf(el) + 1
+
+
+        const lenBoard = el.parentNode.children.length
+
+        if(new_id_col != old_id_col){
+          console.log('changement de colone');
+          const response = await (await request('api/column/switch', 'POST', {task_id: item_id, new_col_id: new_id_col})).json()
+          return true
+        }else{      
+          console.log('from position: ', from_position)
+          console.log('to   position: ', to_position)
+          const response = await (await request('api/task/update-position', 'POST', {task_id: item_id, col_id: old_id_col, from_pos: from_position, to_pos: to_position}))
+        }
+          
+      },
+    })
+    
     setKbn(kbn)
   })
 

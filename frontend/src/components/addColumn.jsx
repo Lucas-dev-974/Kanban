@@ -11,7 +11,7 @@ export default function AddColumn(props) {
         if(title() != null){
             const response = await (await request('api/column/create', 'POST', {title: title()})).json()
             await props.kbn.addBoards([{
-                "id" :    response.id, 
+                "id" :  String(response.id), 
                 "title" : response.title
             }])
             await modal.hide()

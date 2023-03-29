@@ -7,14 +7,13 @@ export default function AddTask(props) {
     
     const addTask = async () => {
         const first_board = props.kbn.options.boards[0].id
-        console.log(props.kbn)
 
-        const response = await (await request('api/task/create', 'POST', {title: title(), col_id: 56})).json()
+        const response = await (await request('api/task/create', 'POST', {title: title(), col_id: 58})).json()
 
         props.kbn.addElement(first_board, {
-            "id"      : response.id,
+            "id"      : String(response.id),
             "title"   : title(),
-        })
+        }, 0)
     }
 
     return (

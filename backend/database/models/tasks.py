@@ -13,6 +13,6 @@ class Tasks(Base):
     title    = Column(String)
     position = Column(Integer)
     desc     = Column(String)
-
     column  = mapped_column(ForeignKey('columns.id'))
  
+setattr(Tasks, 'class', Column(String, default='rounded'))

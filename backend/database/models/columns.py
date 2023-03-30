@@ -12,6 +12,6 @@ class Columns(Base):
 
     id       = Column(Integer, primary_key=True) 
     title    = Column(String)
-    position = Column(String)
+    position = Column(Integer)
 
     tasks   = relationship(Tasks, backref='columns', order_by=Tasks.position)

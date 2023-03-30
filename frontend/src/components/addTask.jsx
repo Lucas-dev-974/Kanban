@@ -1,19 +1,29 @@
-import { createSignal } from "solid-js"
+import { createSignal, onMount } from "solid-js"
 import { request } from "../reqeuest"
 
 export default function AddTask(props) {
     const [title, setTitle]      = createSignal(null)
     const [description, setDesc] = createSignal(null)
+    const [itemLength, setItemLength] = createSignal(null)
+
     
     const addTask = async () => {
-        const first_board = props.kbn.options.boards[0].id
+        if(itemLength() == null) setItemLength(props.kbn().options.boards[0].item.length)
+        
+        const first_board = props.kbn().options.boards[0].id
 
-        const response = await (await request('api/task/create', 'POST', {title: title(), col_id: 58})).json()
+        const response = await (await request('api/task', 'POST', {title: title(), col_id: first_board})).json()
 
-        props.kbn.addElement(first_board, {
+        console.log(props.kbn().options.boards[0].item.length);
+        props.kbn().addElement(first_board, {
             "id"      : String(response.id),
             "title"   : title(),
-        }, 0)
+            'position': itemLength() + 1
+        }, itemLength())
+        setItemLength(itemLength() + 1)
+       
+        const el = document.querySelectorAll('[data-eid="' + response.id + '"]');
+        console.log(el);
     }
 
     return (
@@ -43,7 +53,7 @@ export default function AddTask(props) {
                          {/* ------------------ END CONTENT MODAL  ------------------*/}
                         <div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
                             <button onClick={addTask} type="button" class="ml-1 inline-block rounded bg-primary px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]" data-te-ripple-init data-te-ripple-color="light">
-                                Save changes
+                                Fermer
                             </button>
                         </div>
                     </div>

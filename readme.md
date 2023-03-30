@@ -14,3 +14,21 @@ Les fonctionnalités seront les suivantes :
 
 Outre les besoins fonctionnels, votre responsable souhaite pouvoir faire continuer ce POC par un autre collègue par la suite.
 En terme de technologie vous êtes libre de choix, il vous conseil la librairie jKanban mais celle-ci n'est pas imposée 
+
+## Start
+
+### Backend
+ - cd backend
+ - py -m venv .venv
+ - (placer user=user database, password=pwd database, database=database) -> backend/.venv/pyvenv.cfg (rajouter en 1er ligne du fichier [venv])
+    - pip install:
+      - hug
+      - psycopg2
+      - sqlalchemy
+  - (lancer l'environement) -> .venv/Script/Activate.ps1
+  - hug -f server
+
+### Frontend
+ - cd frontend
+ - npm install
+ - npm run dev
